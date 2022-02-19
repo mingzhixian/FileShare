@@ -65,6 +65,16 @@
 	background-color:#79797996;
 }
 
+#Download{
+	width: 85%;
+	max-width: 600px;
+	margin:30px auto 40px auto;
+	text-align: center;
+	border-radius:22px;
+	font-size: 30px;
+	background-color: #53796785;
+}
+
 #Bottom {
 	margin:40px auto 50px auto;
 	font-size: 8px;

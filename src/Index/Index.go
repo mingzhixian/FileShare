@@ -30,7 +30,7 @@ func scanFiles(FilePath string) string {
 		log.Fatal(err)
 	}
 	for _, f := range files {
-		names += "<div class=\"file\" onclick=\"Download('" + f.Name() + "')\">" + f.Name() + "</div>\n"
+		names += "<div class=\"file\" onclick=\"Preview('" + f.Name() + "')\">" + f.Name() + "</div>\n"
 	}
 	return names
 }

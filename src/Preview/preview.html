@@ -6,15 +6,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{.Name}}</title>
 	<link href="{{.DayAndNight}}" type="text/css" rel="stylesheet">
-	<script src="./Static/js/index.js"></script>
+	<script src="./Static/js/preview.js"></script>
 </head>
 <body>
 	<div id="web_bg"></div>
-	<div id="Title">{{.Name}}</div>
-	<div id="Body">
-		<div id="blur"></div>
-		{{.Body}}
-	</div>
+	<div id="Title">{{.File}}</div>
+	<div id="Download" class="file" onclick="Download('{{.File}}')">点击下载</div>
+	<div id="Body">{{.Body}}</div>
 	<div id="Bottom">
 		<p>{{.Name}}</p>
 		<p>请勿使用爬虫或短时间多次下载</p>

@@ -2,7 +2,10 @@ package main
 
 import (
 	"FileShare/src/AppSet"
+	"FileShare/src/Download"
 	"FileShare/src/Index"
+	"FileShare/src/Preview"
+	"FileShare/src/Upload"
 	"embed"
 	"flag"
 	"fmt"
@@ -45,6 +48,9 @@ func main() {
 	http.Handle("/Static/css/", staticHandle)
 	http.Handle("/Static/img/", staticHandle)
 	http.HandleFunc("/", Index.Index)
+	http.HandleFunc("/Upload", Upload.Upload)
+	http.HandleFunc("/Preview", Preview.Preview)
+	http.HandleFunc("/Download", Download.Download)
 	//启动http服务器，开始监听
 	start(p)
 }
