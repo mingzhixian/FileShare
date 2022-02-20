@@ -7,13 +7,16 @@
 	<title>{{.Name}}</title>
 	<link href="{{.DayAndNight}}" type="text/css" rel="stylesheet">
 	<link href="./Static/css/main.css" type="text/css" rel="stylesheet">
-	<script src="./Static/js/preview.js"></script>
+	<script src="./Static/js/jquery.js"></script>
+	<script src="./Static/js/upload.js"></script>
 </head>
 <body>
 	<div id="web_bg"></div>
-	<div id="Title">{{.File}}</div>
-	<div id="Download" class="file" onclick="Download('{{.File}}')">点击下载</div>
-	<div id="Body">{{.Body}}</div>
+	<div id="Title">{{.Name}}</div>
+	<div id="Upload" class="file">
+		点击上传
+		<input type="file" id="file" name="file" multiple onchange="handleFiles(this.files)">
+	</div>
 	<div id="Bottom">
 		<p>{{.Name}}</p>
 		<p>请勿使用爬虫或短时间多次下载</p>

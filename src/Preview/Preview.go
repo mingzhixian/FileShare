@@ -17,8 +17,12 @@ func Preview(response http.ResponseWriter, request *http.Request) {
 	File := request.Form["file"][0]
 	Name := AppSet.GetName()
 	Body := viewfile(File)
-	//返回数据
-	templateHtml(File, Name, Body, response)
+	if File == "" {
+		http.Redirect(response, request, "./", http.StatusFound) //重定向
+	} else {
+		//返回数据
+		templateHtml(File, Name, Body, response)
+	}
 }
 
 func viewfile(File string) string {

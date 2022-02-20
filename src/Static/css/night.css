@@ -1,83 +1,29 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
 #web_bg {
-	position: fixed;
 	background-color: rgb(88, 85, 85);
 	background-image: url(../img/back.svg);
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	min-width: 1000px;
-	z-index: -100;
-	zoom: 1;
-	background-repeat: no-repeat;
-	background-size: cover;
-	-webkit-background-size: cover;
-	-o-background-size: cover;
-	background-position: center 0;
 }
 
 #Title {
-	font-size: 40px;
-	font-weight: bold;
-	text-align: center;
-	margin: 40px auto 30px auto;
 	color: #bdbdbd;
 }
 
-#Body {
-	width: 85%;
-	max-width: 600px;
-	padding: 20px 22px;
-	border-radius: 22px;
-	margin: 0 auto;
-	overflow: hidden;
-	position: relative;
-}
 
 #Body::before {
-	content: '';
-	position: absolute;
-	top: -10px;
-	bottom: -10px;
-	left: -10px;
-	right: -10px;
-	filter: blur(5px);
 	background-color:#76797c87;
-	z-index: -1;
 }
 
 .file {
 	background-color: #91919196;
-	border-radius: 12px;
-	padding: 8px 24px;
-	margin: 14px 0;
-	font-size: 24px;
 	color: #bdbdbd;
-	transition: background-color 500ms;
 }
 .file:hover{
 	background-color:#79797996;
 }
 
 #Download{
-	width: 85%;
-	max-width: 600px;
-	margin:30px auto 40px auto;
-	text-align: center;
-	border-radius:22px;
-	font-size: 30px;
 	background-color: #53796785;
 }
 
 #Bottom {
-	margin:40px auto 50px auto;
-	font-size: 8px;
-	text-align: center;
 	color: #bdbdbd;
 }
