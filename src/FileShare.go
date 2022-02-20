@@ -20,6 +20,7 @@ var static embed.FS
 var n = flag.String("n", "FileShare", "分享站名字")
 var d = flag.String("d", "./Data", "数据存放地址")
 var p = flag.Int("p", 8080, "监听端口号")
+var s = flag.Int64("s", 1024, "最大允许上传文件大小")
 
 //启动http服务器
 func start(p *int) {
@@ -37,6 +38,7 @@ func main() {
 	//个人设置
 	AppSet.SetName(*n)
 	AppSet.SetData(*d)
+	AppSet.SetMaxSize(*s)
 	//打印信息
 	fmt.Println("文件分享站：" + *n)
 	fmt.Println("数据地址：" + *d)

@@ -3,13 +3,21 @@ package Preview
 import (
 	"FileShare/src/AppSet"
 	_ "embed"
+
+	blackfriday "github.com/russross/blackfriday/v2"
+
+	"io/ioutil"
 	"net/http"
+	"path"
 	"text/template"
 	"time"
 )
 
 //go:embed preview.html
 var preview string
+
+//附加样式文件
+var attachment = ""
 
 func Preview(response http.ResponseWriter, request *http.Request) {
 	request.ParseForm()
@@ -25,8 +33,42 @@ func Preview(response http.ResponseWriter, request *http.Request) {
 	}
 }
 
+//检测文件类型，并解析
 func viewfile(File string) string {
-	return "暂不支持此格式预览"
+	prefix := path.Ext(File)[1:]
+	attachment = "<link href=\"./Static/css/" + prefix + ".css\" type=\"text/css\" rel=\"stylesheet\">"
+	if prefix == "txt" {
+		return viewTxt(File)
+	} else if prefix == "md" {
+		return viewMarkdown(File)
+	} else if prefix == "doc" {
+		return viewMarkdown(File)
+	} else if prefix == "video" {
+		return viewMarkdown(File)
+	} else if prefix == "audio" {
+		return viewMarkdown(File)
+	} else if prefix == "img" {
+		return viewMarkdown(File)
+	} else {
+		return "暂不支持此格式预览"
+	}
+}
+
+//预览函数
+func viewTxt(File string) string {
+	f, err := ioutil.ReadFile(AppSet.GetData() + "/" + File)
+	if err != nil {
+		return "发生错误，读取文件失败"
+	}
+	return "<pre>" + string(f) + "</pre>"
+}
+
+func viewMarkdown(File string) string {
+	f, err := ioutil.ReadFile(AppSet.GetData() + "/" + File)
+	if err != nil {
+		return "发生错误，读取文件失败"
+	}
+	return "<div class=\"markdown-body\">" + string(blackfriday.Run(f)) + "</div>"
 }
 
 //组装并返回数据
@@ -34,20 +76,20 @@ func templateHtml(File string, Name string, Body string, response http.ResponseW
 	html := template.New("Preview")
 	html.Parse(preview)
 	data := map[string]string{
-		"Name":        Name,
-		"File":        File,
-		"Body":        Body,
-		"DayAndNight": dayAndNight(),
+		"Name": Name,
+		"File": File,
+		"Body": Body,
+		"css":  css(),
 	}
 	html.Execute(response, data)
 }
 
 //设置网页主题
-func dayAndNight() string {
+func css() string {
 	hour := time.Now().Hour()
 	if hour > 18 || hour < 8 {
-		return "./Static/css/night.css"
+		return "<link href=\"./Static/css/night.css\" type=\"text/css\" rel=\"stylesheet\">" + attachment
 	} else {
-		return "./Static/css/day.css"
+		return "<link href=\"./Static/css/day.css\" type=\"text/css\" rel=\"stylesheet\">" + attachment
 	}
 }

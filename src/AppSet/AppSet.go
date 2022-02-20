@@ -7,6 +7,7 @@ import (
 
 var Data = ""
 var Name = ""
+var MaxSize int64 = 1024
 
 //设置数据地址
 func SetData(path string) {
@@ -31,4 +32,14 @@ func SetName(name string) {
 //获取分享站名字
 func GetName() string {
 	return Name
+}
+
+//设置最大允许文件大小
+func SetMaxSize(maxSize int64) {
+	MaxSize = maxSize
+}
+
+//获取最大允许文件大小
+func GetMaxSize() int64 {
+	return MaxSize
 }
