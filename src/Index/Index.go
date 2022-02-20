@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -30,7 +31,8 @@ func scanFiles(FilePath string) string {
 		log.Fatal(err)
 	}
 	for _, f := range files {
-		names += "<div class=\"file\" onclick=\"Preview('" + f.Name() + "')\">" + f.Name() + "</div>\n"
+		prefix := f.Name()[strings.IndexAny(f.Name(), ".")+1:]
+		names += "<div class=\"file\" onclick=\"Preview('" + f.Name() + "')\">" + "<img src=\"./Static/img/icons/" + prefix + ".svg\">" + f.Name() + "</div>\n"
 	}
 	return names
 }
