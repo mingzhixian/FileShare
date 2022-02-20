@@ -41,10 +41,10 @@ func viewfile(File string) string {
 		return viewTxt(File)
 	} else if prefix == "md" {
 		return viewMarkdown(File)
-	} else if prefix == "doc" {
+	} else if prefix == "mp4" || prefix == "webp" {
 		return viewMarkdown(File)
 	} else if prefix == "video" {
-		return viewMarkdown(File)
+		return view(File)
 	} else if prefix == "audio" {
 		return viewMarkdown(File)
 	} else if prefix == "img" {
@@ -69,6 +69,10 @@ func viewMarkdown(File string) string {
 		return "发生错误，读取文件失败"
 	}
 	return "<div class=\"markdown-body\">" + string(blackfriday.Run(f)) + "</div>"
+}
+
+func viewVideo(File string) string {
+	return "<video id=\"video\" src=\"./Download?file=" + File + "\"></video>"
 }
 
 //组装并返回数据
