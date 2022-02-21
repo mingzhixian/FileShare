@@ -31,7 +31,12 @@ func scanFiles(FilePath string) string {
 		log.Fatal(err)
 	}
 	for _, f := range files {
-		prefix := path.Ext(f.Name())[1:]
+		prefix := path.Ext(f.Name())
+		if prefix == "" {
+			prefix = "file"
+		} else {
+			prefix = prefix[1:]
+		}
 		names += "<div class=\"file\" onclick=\"Preview('" + f.Name() + "')\">" + "<img src=\"./Static/img/icons/" + prefix + ".svg\">" + f.Name() + "</div>\n"
 	}
 	return names

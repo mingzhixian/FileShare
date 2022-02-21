@@ -1,3 +1,4 @@
+var fileid = 0;
 //处理文件
 function handleFiles(files) {
 	if (files.length === 0) {
@@ -10,14 +11,15 @@ function handleFiles(files) {
 function handle(files, i, ele) {
 	let data = new FormData();
 	data.append('file', files[i]);
-	$('#Uploaded').append("<div id=\"UploadFiles" + i + "\" class=\"UploadFiles\">" + "<span class='UploadFilesName'>" + files[i].name + "</span><span class='UploadFilesDone'></span>" + "</div>")
-	push(data, i);
+	$('#Uploaded').append("<div id=\"UploadFiles" + fileid + "\" class=\"UploadFiles\">" + "<span class='UploadFilesName'>" + files[i].name + "</span><span class='UploadFilesDone'></span>" + "</div>")
+	push(data, i, fileid);
+	fileid++;
 	if (i + 1 < ele) {
 		handle(files, i + 1, ele);
 	}
 }
 //上传数据
-function push(data, i) {
+function push(data, i,id) {
 	$.ajax({
 		url: "./Upload",
 		type: "post",
@@ -32,8 +34,9 @@ function push(data, i) {
 			xhr.upload.addEventListener('progress', function (e) {
 				//loaded代表上传了多少
 				//total代表总数为多少
-				var progressRate = (e.loaded / e.total) * 100+"%";
-				$('#UploadFiles'+i+' .UploadFilesDone').html(progressRate);
+				var progressRate = parseInt((e.loaded / e.total) * 100) + "%";
+				var table = '#UploadFiles' + id + ' .UploadFilesDone';
+				$(table).html(progressRate);
 				console.log(progressRate);
 			})
 
@@ -43,7 +46,8 @@ function push(data, i) {
 		if (output !== "done") {
 			alert("第" + (i + 1).toString() + "个文件上传失败！请稍候再试！");
 		} else {
-			//$('#UploadFiles'+i+' .UploadFilesDone').html("完成");
+			var table = '#UploadFiles' + id + ' .UploadFilesDone';
+			$(table).html("完成");
 		}
 	}).fail(function (xhr, status) {
 		console.log(status);

@@ -77,7 +77,7 @@ func viewMarkdown(File string) string {
 }
 
 func viewVideo(File string) string {
-	return "<video id=\"video\" src=\"./Download?file=" + File + "\"></video>"
+	return "<video id=\"video\" controls src=\"./Download?file=" + File + "\"></video>"
 }
 
 func viewAudio(File string) string {
