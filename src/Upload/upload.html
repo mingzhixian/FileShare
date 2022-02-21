@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,9 +8,11 @@
 	<title>{{.Name}}</title>
 	<link href="{{.DayAndNight}}" type="text/css" rel="stylesheet">
 	<link href="./Static/css/main.css" type="text/css" rel="stylesheet">
+	<link href="./Static/css/upload.css" type="text/css" rel="stylesheet">
 	<script src="./Static/js/jquery.js"></script>
 	<script src="./Static/js/upload.js"></script>
 </head>
+
 <body>
 	<div id="web_bg"></div>
 	<div id="Title">{{.Name}}</div>
@@ -17,9 +20,16 @@
 		点击上传
 		<input type="file" id="file" name="file" multiple onchange="handleFiles(this.files)">
 	</div>
+	<div id="Uploaded" class="file">
+		<div id="UploadedFiles">
+			<pre>上传列表</pre>
+			<pre>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</pre>
+		</div>
+	</div>
 	<div id="Bottom">
 		<p>{{.Name}}</p>
 		<p>请勿使用爬虫或短时间多次下载</p>
 	</div>
 </body>
+
 </html>

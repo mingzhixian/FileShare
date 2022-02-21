@@ -1,0 +1,28 @@
+#Uploaded {
+	margin: 0 auto;
+	width: 85%;
+	max-width: 600px;
+	overflow: hidden;
+	height: auto;
+	padding: 14px 16px 14px 16px;
+	line-height: 30px;
+}
+
+#UploadedFiles {
+	overflow: hidden;
+}
+
+#UploadedFiles pre {
+	text-align: center;
+}
+.UploadedFiles{
+	position: relative;
+}
+.UploadFilesNamed {
+	position: absolute;
+	left: 0;
+}
+.UploadFilesDone {
+	position: absolute;
+	right: 16px;
+}

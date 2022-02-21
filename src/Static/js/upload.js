@@ -10,11 +10,10 @@ function handleFiles(files) {
 function handle(files, i, ele) {
 	let data = new FormData();
 	data.append('file', files[i]);
+	$('#Uploaded').append("<div id=\"UploadFiles" + i + "\" class=\"UploadFiles\">" + "<span class='UploadFilesName'>" + files[i].name + "</span><span class='UploadFilesDone'></span>" + "</div>")
 	push(data, i);
 	if (i + 1 < ele) {
 		handle(files, i + 1, ele);
-	} else if (i + 1 === ele) {
-		window.open("./");
 	}
 }
 //上传数据
@@ -26,10 +25,25 @@ function push(data, i) {
 		mimeType: "multipart/form-data",
 		contentType: false,
 		cache: false,
-		processData: false
+		processData: false,
+		xhr: function () {
+			var xhr = new XMLHttpRequest();
+			//使用XMLHttpRequest.upload监听上传过程，注册progress事件，打印回调函数中的event事件
+			xhr.upload.addEventListener('progress', function (e) {
+				//loaded代表上传了多少
+				//total代表总数为多少
+				var progressRate = (e.loaded / e.total) * 100+"%";
+				$('#UploadFiles'+i+' .UploadFilesDone').html(progressRate);
+				console.log(progressRate);
+			})
+
+			return xhr;
+		}
 	}).done(function (output) {
 		if (output !== "done") {
 			alert("第" + (i + 1).toString() + "个文件上传失败！请稍候再试！");
+		} else {
+			//$('#UploadFiles'+i+' .UploadFilesDone').html("完成");
 		}
 	}).fail(function (xhr, status) {
 		console.log(status);
