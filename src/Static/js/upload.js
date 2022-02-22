@@ -1,3 +1,21 @@
+//新建文件夹
+function newFiles(){
+	var FilesName=prompt("请输入文件夹名");
+	if(FilesName!=null&&FilesName!=""){
+		$.ajax({
+			url: "./Upload?NewFiles="+FilesName,
+			type: "get"
+		}).done(function (output) {
+			if (output !== "done") {
+				alert("出现错误，请稍后再试!");
+			} else {
+				alert("成功!")
+			}
+		}).fail(function (xhr, status) {
+			console.log(status);
+		});
+	}
+}
 var fileid = 0;
 //处理文件
 function handleFiles(files) {

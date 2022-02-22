@@ -16,9 +16,12 @@
 <body>
 	<div id="web_bg"></div>
 	<div id="Title">{{.Name}}</div>
-	<div id="Upload" class="file">
-		点击上传
-		<input type="file" id="file" name="file" multiple onchange="handleFiles(this.files)">
+	<div id="Button">
+		<div id="Upload" class="file">
+			点击上传
+			<input type="file" id="file" name="file" multiple onchange="handleFiles(this.files)">
+		</div>
+		<div id="NewFiles" class="file" onclick="newFiles()">新建文件夹</div>
 	</div>
 	<div id="Uploaded" class="file">
 		<div id="UploadedFiles">
