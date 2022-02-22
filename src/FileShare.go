@@ -51,6 +51,7 @@ func main() {
 	http.Handle("/Static/img/", staticHandle)
 	http.Handle("/Static/font/", staticHandle)
 	http.HandleFunc("/", Index.Index)
+	http.HandleFunc("/Index", Index.Index)
 	http.HandleFunc("/Upload", Upload.Upload)
 	http.HandleFunc("/Preview", Preview.Preview)
 	http.HandleFunc("/Download", Download.Download)

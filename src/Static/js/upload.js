@@ -37,7 +37,6 @@ function push(data, i,id) {
 				var progressRate = parseInt((e.loaded / e.total) * 100) + "%";
 				var table = '#UploadFiles' + id + ' .UploadFilesDone';
 				$(table).html(progressRate);
-				console.log(progressRate);
 			})
 
 			return xhr;

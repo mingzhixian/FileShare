@@ -48,9 +48,9 @@ func viewfile(File string) string {
 	} else if prefix == "mp3" {
 		attachment = "<link href=\"./Static/css/audio.css\" type=\"text/css\" rel=\"stylesheet\">"
 		return viewAudio(File)
-	} else if prefix == "audio" {
-		attachment = "<link href=\"./Static/css/txt.css\" type=\"text/css\" rel=\"stylesheet\">"
-		return viewMarkdown(File)
+	} else if prefix == "pdf" {
+		attachment = "<link href=\"./Static/css/pdf.css\" type=\"text/css\" rel=\"stylesheet\">"
+		return viewPdf(File)
 	} else if prefix == "jpg" || prefix == "png" || prefix == "svg" || prefix == "webp" {
 		attachment = "<link href=\"./Static/css/img.css\" type=\"text/css\" rel=\"stylesheet\">"
 		return viewImg(File)
@@ -86,6 +86,9 @@ func viewAudio(File string) string {
 
 func viewImg(File string) string {
 	return "<img id=\"img\" src=\"./Download?file=" + File + "\"></img>"
+}
+func viewPdf(File string) string {
+	return "<iframe id=\"pdf\" src=\"./Static/js/pdfJs/generic/web/viewer.html?file=../../../../../Download?file=" + File + "\"></iframe>"
 }
 
 //组装并返回数据

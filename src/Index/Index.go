@@ -3,8 +3,8 @@ package Index
 import (
 	"FileShare/src/AppSet"
 	_ "embed"
+	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"path"
 	"text/template"
@@ -13,12 +13,24 @@ import (
 
 //go:embed index.html
 var index string
+var Iserr = 0
 
 //获取文章
 func Index(response http.ResponseWriter, request *http.Request) {
+	request.ParseForm()
 	//获取数据文件夹目录和分享站名字
-	Files := scanFiles(AppSet.GetData())
+	FilePath := ""
+	if len(request.Form["dir"]) == 0 {
+		FilePath = AppSet.GetData()
+	} else {
+		FilePath = AppSet.GetData() + "/" + request.Form["dir"][0]
+	}
+	Files := scanFiles(FilePath)
 	Name := AppSet.GetName()
+	if Iserr == 1 {
+		Iserr = 0
+		http.Redirect(response, request, "./", http.StatusFound)
+	}
 	//返回数据
 	templateHtml(Files, Name, response)
 }
@@ -28,7 +40,9 @@ func scanFiles(FilePath string) string {
 	var names string
 	files, err := ioutil.ReadDir(FilePath)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		Iserr = 1
+		return ""
 	}
 	for _, f := range files {
 		prefix := path.Ext(f.Name())
@@ -37,7 +51,11 @@ func scanFiles(FilePath string) string {
 		} else {
 			prefix = prefix[1:]
 		}
-		names += "<div class=\"file\" onclick=\"Preview('" + f.Name() + "')\">" + "<img src=\"./Static/img/icons/" + prefix + ".svg\">" + f.Name() + "</div>\n"
+		if f.IsDir() {
+			names += "<div class=\"file\" onclick=\"Files('" + f.Name() + "')\">" + "<img src=\"./Static/img/icons/files.svg\">" + f.Name() + "</div>\n"
+		} else {
+			names += "<div class=\"file\" onclick=\"Preview('" + f.Name() + "')\">" + "<img src=\"./Static/img/icons/" + prefix + ".svg\">" + f.Name() + "</div>\n"
+		}
 	}
 	return names
 }
