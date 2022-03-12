@@ -6,13 +6,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path"
 	"text/template"
-	"time"
 )
 
 //go:embed index.html
 var index string
+
+//go:embed welcome.html
+var welcome string
+
 var Iserr = 0
 
 //获取文章
@@ -21,18 +25,27 @@ func Index(response http.ResponseWriter, request *http.Request) {
 	//获取数据文件夹目录和分享站名字
 	FilePath := ""
 	if len(request.Form["dir"]) == 0 {
-		FilePath = AppSet.GetData()
+		Name := AppSet.GetName()
+		//返回数据
+		templateHtml2(Name, response)
 	} else {
 		FilePath = AppSet.GetData() + "/" + request.Form["dir"][0]
+		//创建数据文件夹
+		err := os.MkdirAll(FilePath, os.ModePerm)
+		if err != nil {
+			fmt.Println(err)
+		}
+		//扫描文件夹
+		Files := scanFiles(FilePath)
+		Name := AppSet.GetName()
+		if Iserr == 1 {
+			Iserr = 0
+			http.Redirect(response, request, "./", http.StatusFound)
+		}
+		//返回数据
+		templateHtml1(Files, Name, response)
 	}
-	Files := scanFiles(FilePath)
-	Name := AppSet.GetName()
-	if Iserr == 1 {
-		Iserr = 0
-		http.Redirect(response, request, "./", http.StatusFound)
-	}
-	//返回数据
-	templateHtml(Files, Name, response)
+
 }
 
 //扫描文件夹下的所有文件，返回文件名的集合
@@ -52,32 +65,38 @@ func scanFiles(FilePath string) string {
 			prefix = prefix[1:]
 		}
 		if f.IsDir() {
-			names += "<div class=\"file\" onclick=\"Files('" + f.Name() + "')\">" + "<img src=\"./Static/img/icons/files.svg\">" + f.Name() + "</div>\n"
+			names += "<div class='item folder'>" +
+				"			<img src='./Static/img/icons/files.svg'>" +
+				"			<span>" + f.Name() + "</span>" +
+				"			<div class='delete' onclick='Delete('" + FilePath + "/" + f.Name() + "')'>删除</div>" +
+				"		</div>"
 		} else {
-			names += "<div class=\"file\" onclick=\"Preview('" + f.Name() + "')\">" + "<img src=\"./Static/img/icons/" + prefix + ".svg\">" + f.Name() + "</div>\n"
+			names += "<div class='item'>" +
+				"		<img src='./Static/img/icons/" + prefix + ".svg'>" +
+				"		<span>" + f.Name() + "</span>" +
+				"		<div class='download' onclick='Download('" + FilePath + "/" + f.Name() + "')'>下载</div>" +
+				"		<div class='delete' onclick='Delete('" + FilePath + "/" + f.Name() + "')'>删除</div>" +
+				"	</div>"
 		}
 	}
 	return names
 }
 
 //组装并返回数据
-func templateHtml(Files string, Name string, response http.ResponseWriter) {
+func templateHtml1(Files string, Name string, response http.ResponseWriter) {
 	html := template.New("Index")
 	html.Parse(index)
 	data := map[string]string{
-		"Name":        Name,
-		"Body":        Files,
-		"DayAndNight": dayAndNight(),
+		"Name": Name,
+		"Body": Files,
 	}
 	html.Execute(response, data)
 }
-
-//设置网页主题
-func dayAndNight() string {
-	hour := time.Now().Hour()
-	if hour > 18 || hour < 8 {
-		return "./Static/css/night.css"
-	} else {
-		return "./Static/css/day.css"
+func templateHtml2(Name string, response http.ResponseWriter) {
+	html := template.New("Welcome")
+	html.Parse(welcome)
+	data := map[string]string{
+		"Name": Name,
 	}
+	html.Execute(response, data)
 }

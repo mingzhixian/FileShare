@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+	<meta charset='UTF-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+	<title>{{.Name}}</title>
+	<link href='./Static/css/main.css' type='text/css' rel='stylesheet'>
+	<script src='./Static/js/jquery.js'></script>
+	<script src='./Static/js/anime.min.js'></script>
+	<script src='./Static/js/main.js'></script>
+	<script>
+		alert("请输入您的标识进入您的个人空间，若已有人使用该标识，请改用其他标识，请文明使用，不要随意删除他人文件，空间不限大小，但长时间（10天）不进行操作将自动清空空间。");
+	</script>
+</head>
+
+<body>
+	<div id='web_bg'></div>
+	<div id='Title'>{{.Name}}</div>
+	<div id='Body' class='toUsrSpace'>
+		<div contenteditable placeholder='请输入'></div>
+		<span onclick="ToUsrSpace()">|  提交</span>
+	</div>
+</body>
+
+</html>
