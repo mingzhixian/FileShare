@@ -74,13 +74,12 @@
 	border-radius: 12px;
 	font-size: 25px;
 	line-height: 55px;
-	padding: 0 14px 0 14px;
 	transition: background-color 500ms, opacity 500ms;
 	top: 11px;
 	height: 55px;
 	width: 47%;
 	text-align: center;
-	margin: -14px 0 14px 0;
+	margin: -14px 0 22px 0;
 	position: relative;
 }
 
@@ -88,7 +87,9 @@
 	float: left;
 	background-color: #ddd8b182;
 }
-
+.upload:hover{
+	background-color: #e2d580a8;
+}
 .upload input {
 	position: absolute;
 	opacity: 0;
@@ -102,10 +103,13 @@
 	float: right;
 	background-color: #89b9c563;
 }
+.newFolder:hover{
+	background-color: #6d959f7d;
+}
 
 .item {
 	border-radius: 12px;
-	margin: 14px 0;
+	margin: 16px 0;
 	height: 55px;
 	transition: background-color 500ms, opacity 500ms;
 	position: relative;

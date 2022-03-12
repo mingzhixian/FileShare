@@ -19,7 +19,7 @@ func Upload(response http.ResponseWriter, request *http.Request) {
 		}
 		defer file.Close()
 		//写入文件
-		f, err := os.Create(AppSet.GetData() + "/" + handler.Filename)
+		f, err := os.Create(AppSet.GetData() + "/" + request.Form["dir"][0] + "/" + handler.Filename)
 		if err != nil {
 			fmt.Println(err)
 		}

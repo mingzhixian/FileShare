@@ -7,9 +7,29 @@
 		duration: 500
 	});
 } */
-//前往用户空间
-function ToUsrSpace(){
-	window.open("./?dir="+$('#Body div').text());
+
+//获取url参数
+function getQueryVariable(variable) {
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	for (var i = 0; i < vars.length; i++) {
+		var pair = vars[i].split("=");
+		if (pair[0] == variable) {
+			return pair[1];
+		}
+	}
+	return ("");
+}
+//当前目录
+var FilePath = getQueryVariable("dir");
+
+//前往子文件夹
+function ToDir(folderName) {
+	if (folderName == "") {
+		window.open("./?dir=" + $('#Body div').text());
+	} else {
+		window.open("./?dir=" + FilePath + "/" + folderName);
+	}
 }
 var fileid = 0;
 //处理文件
@@ -22,9 +42,21 @@ function Upload(files) {
 }
 
 function handle(files, i, ele) {
+	//获取文件类型
+	var prefix = files[i].name.substring(files[i].name.indexOf(".") + 1);
+	if (prefix == "") {
+		prefix = "file"
+	}
+	//加入数据
 	let data = new FormData();
 	data.append('file', files[i]);
-	$('#Body').append("<div id=\"UploadFiles" + fileid + "\" class=\"UploadFiles\">" + "<span class='UploadFilesName'>" + files[i].name + "</span><span class='UploadFilesDone'></span>" + "</div>")
+	data.append('dir', FilePath)
+	$('#Body').append("<div class='item'>" +
+		"		<img src='./Static/img/icons/" + prefix + ".svg'>" +
+		"		<span>" + files[i].name + "</span>" +
+		"		<div class='download' onclick='Download('" + FilePath + "/" + files[i].name + "')'>下载</div>" +
+		"		<div class='delete' onclick='Delete('" + FilePath + "/" + files[i].name + "')'>删除</div>" +
+		"	</div>");
 	push(data, i, fileid);
 	fileid++;
 	if (i + 1 < ele) {
@@ -32,7 +64,7 @@ function handle(files, i, ele) {
 	}
 }
 //上传数据
-function push(data, i,id) {
+function push(data, i, id) {
 	$.ajax({
 		url: "./Upload",
 		type: "post",
@@ -49,7 +81,7 @@ function push(data, i,id) {
 				//total代表总数为多少
 				var progressRate = parseInt((e.loaded / e.total) * 100) + "%";
 				var table = '#UploadFiles' + id + ' .UploadFilesDone';
-				$(table).html(progressRate);
+				//$(table).html(progressRate);
 			})
 
 			return xhr;
@@ -59,8 +91,41 @@ function push(data, i,id) {
 			alert("第" + (i + 1).toString() + "个文件上传失败！请稍候再试！");
 		} else {
 			var table = '#UploadFiles' + id + ' .UploadFilesDone';
-			$(table).html("完成");
+			//$(table).html("完成");
 		}
+	}).fail(function (xhr, status) {
+		console.log(status);
+	});
+}
+
+//新建文件夹
+function NewFolder() {
+	var folderName = prompt("请输入文件夹名", "");
+	if(folderName!=null){
+		$.ajax({
+			url: "./?dir=" + FilePath + "/" + folderName,
+			type: "get",
+		}).done(function () {
+			location.reload();
+		}).fail(function (xhr, status) {
+			console.log(status);
+		});
+	}
+}
+
+//下载数据
+function Download(filePath){
+	window.open("./Download?filePath="+filePath);
+}
+
+//删除数据
+function Delete(filePath){
+	window.event.cancelBubble = true;
+	$.ajax({
+		url: "./Delete?filePath="+filePath,
+		type: "get",
+	}).done(function () {
+		location.reload();
 	}).fail(function (xhr, status) {
 		console.log(status);
 	});

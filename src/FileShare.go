@@ -2,6 +2,7 @@ package main
 
 import (
 	"FileShare/src/AppSet"
+	"FileShare/src/Delete"
 	"FileShare/src/Download"
 	"FileShare/src/Index"
 	"FileShare/src/Upload"
@@ -49,6 +50,7 @@ func main() {
 	http.HandleFunc("/", Index.Index)
 	http.HandleFunc("/Upload", Upload.Upload)
 	http.HandleFunc("/Download", Download.Download)
+	http.HandleFunc("/Delete", Delete.Delete)
 	//启动http服务器，开始监听
 	start(p)
 }
