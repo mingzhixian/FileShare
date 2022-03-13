@@ -115,14 +115,14 @@ function NewFolder() {
 
 //下载数据
 function Download(filePath){
-	window.open("./Download?filePath="+filePath);
+	window.open("./Download?dir="+filePath);
 }
 
 //删除数据
 function Delete(filePath){
 	window.event.cancelBubble = true;
 	$.ajax({
-		url: "./Delete?filePath="+filePath,
+		url: "./Delete?dir="+filePath,
 		type: "get",
 	}).done(function () {
 		location.reload();

@@ -5,12 +5,15 @@ import (
 	"FileShare/src/Delete"
 	"FileShare/src/Download"
 	"FileShare/src/Index"
+	"FileShare/src/SpaceDate"
 	"FileShare/src/Upload"
 	"embed"
 	"flag"
 	"fmt"
 	"net/http"
 	"strconv"
+
+	cron "github.com/robfig/cron/v3"
 )
 
 //go:embed Static
@@ -30,6 +33,13 @@ func start(p *int) {
 	}
 }
 
+//更新空间守则
+func daily() {
+	c := cron.New()
+	c.AddFunc("@every 24h", SpaceDate.DownDate)
+	c.Start()
+}
+
 //主函数
 func main() {
 	//解析命令行参数
@@ -42,6 +52,8 @@ func main() {
 	fmt.Println("数据地址：" + *d)
 	fmt.Println("监听端口：" + strconv.Itoa(*p))
 	fmt.Println("启动服务...")
+	//设置每日任务
+	daily()
 	//设置监听
 	staticHandle := http.FileServer(http.FS(static))
 	http.Handle("/Static/js/", staticHandle)

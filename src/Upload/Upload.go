@@ -2,6 +2,7 @@ package Upload
 
 import (
 	"FileShare/src/AppSet"
+	"FileShare/src/SpaceDate"
 	"fmt"
 	"io"
 	"net/http"
@@ -26,6 +27,8 @@ func Upload(response http.ResponseWriter, request *http.Request) {
 		defer f.Close()
 		io.Copy(f, file)
 		fmt.Fprintf(response, "done")
+		//更新时间
+		SpaceDate.UpDate(request.Form["dir"][0])
 	} else {
 		fmt.Fprintf(response, "非法的访问")
 	}
