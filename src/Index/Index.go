@@ -31,22 +31,29 @@ func Index(response http.ResponseWriter, request *http.Request) {
 		templateHtml2(Name, response)
 	} else {
 		FilePath = request.Form["dir"][0]
-		//创建数据文件夹
-		err := os.MkdirAll(AppSet.GetData()+"/"+FilePath, os.ModePerm)
-		if err != nil {
-			fmt.Println(err)
+		//防止用户使用\开头
+		if len(FilePath) > 0 && FilePath[0:1] == "\\" {
+			FilePath = FilePath[1:]
+			http.Redirect(response, request, "./?dir="+FilePath, http.StatusFound)
+		} else {
+			//创建数据文件夹
+			err := os.MkdirAll(AppSet.GetData()+"/"+FilePath, os.ModePerm)
+			if err != nil {
+				fmt.Println(err)
+			}
+			//更新时间
+			SpaceDate.UpDate(FilePath)
+			//扫描文件夹
+			Files := scanFiles(FilePath)
+			Name := AppSet.GetName()
+			//遇到错误
+			if Iserr == 1 {
+				Iserr = 0
+				http.Redirect(response, request, "./", http.StatusFound)
+			}
+			//返回数据
+			templateHtml1(Files, Name, response)
 		}
-		//更新时间
-		SpaceDate.UpDate(FilePath)
-		//扫描文件夹
-		Files := scanFiles(FilePath)
-		Name := AppSet.GetName()
-		if Iserr == 1 {
-			Iserr = 0
-			http.Redirect(response, request, "./", http.StatusFound)
-		}
-		//返回数据
-		templateHtml1(Files, Name, response)
 	}
 }
 
@@ -89,8 +96,8 @@ func templateHtml1(Files string, Name string, response http.ResponseWriter) {
 	html := template.New("Index")
 	html.Parse(index)
 	data := map[string]string{
-		"Name": Name,
-		"Body": Files,
+		"Name":    Name,
+		"WebBody": Files,
 	}
 	html.Execute(response, data)
 }

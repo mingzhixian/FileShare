@@ -21,12 +21,17 @@ function getQueryVariable(variable) {
 	return ("");
 }
 //当前目录
-var FilePath = getQueryVariable("dir");
+var FilePath = decodeURIComponent(getQueryVariable("dir"));
 
 //前往子文件夹
 function ToDir(folderName) {
 	if (folderName == "") {
-		window.open("./?dir=" + $('#Body div').text());
+		var usrSpace=$('#WebBody div').text();
+		if(usrSpace==""||!IsIllegal(usrSpace)){
+			alert("输入违法!")
+		}else{
+			window.open("./?dir=" + $('#WebBody div').text());
+		}
 	} else {
 		window.open("./?dir=" + FilePath + "/" + folderName);
 	}
@@ -51,7 +56,7 @@ function handle(files, i, ele) {
 	let data = new FormData();
 	data.append('file', files[i]);
 	data.append('dir', FilePath)
-	$('#Body').append("<div class='item'>" +
+	$('#WebBody').append("<div class='item'>" +
 		"		<img src='./Static/img/icons/" + prefix + ".svg'>" +
 		"		<span>" + files[i].name + "</span>" +
 		"		<div class='download' onclick='Download('" + FilePath + "/" + files[i].name + "')'>下载</div>" +
@@ -101,7 +106,7 @@ function push(data, i, id) {
 //新建文件夹
 function NewFolder() {
 	var folderName = prompt("请输入文件夹名", "");
-	if(folderName!=null){
+	if(folderName!=null&&IsIllegal(folderName)){
 		$.ajax({
 			url: "./?dir=" + FilePath + "/" + folderName,
 			type: "get",
@@ -110,6 +115,8 @@ function NewFolder() {
 		}).fail(function (xhr, status) {
 			console.log(status);
 		});
+	}else{
+		alert("输入违规!");
 	}
 }
 
@@ -129,4 +136,10 @@ function Delete(filePath){
 	}).fail(function (xhr, status) {
 		console.log(status);
 	});
+}
+
+//判断是否名称违法,违法返回false
+function IsIllegal(str){
+	var patt=/^[\a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+	return patt.test(str);
 }
