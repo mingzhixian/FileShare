@@ -121,6 +121,7 @@
 .item span {
 	font-size: 28px;
 	line-height: 55px;
+	height: 55px;
 	overflow: hidden;
 	position: absolute;
 	left: 68px;
