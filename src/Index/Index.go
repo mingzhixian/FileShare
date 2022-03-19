@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 	"text/template"
 )
 
@@ -71,20 +72,21 @@ func scanFiles(FilePath string) string {
 		if prefix == "" {
 			prefix = "file"
 		} else {
-			prefix = prefix[1:]
+			//转变为小写
+			prefix = strings.ToLower(prefix[1:])
 		}
 		if f.IsDir() {
 			names += "<div onclick='ToDir(\"" + f.Name() + "\")' class='item folder'>" +
-				"			<img src='./Static/img/icons/files.svg'>" +
+				"			<img src='./Static/img/icons/folder.svg'>" +
 				"			<span>" + f.Name() + "</span>" +
-				"			<div class='delete' onclick='Delete(\"" + FilePath + "/" + f.Name() + "\")'>删除</div>" +
+				"			<div class='buttonArea'><div class='delete' onclick='Delete(\"" + FilePath + "/" + f.Name() + "\")'>删除</div></div>" +
 				"		</div>"
 		} else {
 			names += "<div class='item'>" +
 				"		<img src='./Static/img/icons/" + prefix + ".svg'>" +
 				"		<span>" + f.Name() + "</span>" +
-				"		<div class='download' onclick='Download(\"" + FilePath + "/" + f.Name() + "\")'>下载</div>" +
-				"		<div class='delete' onclick='Delete(\"" + FilePath + "/" + f.Name() + "\")'>删除</div>" +
+				"		<div class='buttonArea'><div class='download' onclick='Download(\"" + FilePath + "/" + f.Name() + "\")'>下载</div>" +
+				"		<div class='delete' onclick='Delete(\"" + FilePath + "/" + f.Name() + "\")'>删除</div></div>" +
 				"	</div>"
 		}
 	}

@@ -21,22 +21,28 @@ function getQueryVariable(variable) {
 	return ("");
 }
 //当前目录
-var FilePath = decodeURIComponent(getQueryVariable("dir"));
+var FilePath = "";
+if (decodeURIComponent(getQueryVariable("dir")) != null) {
+	FilePath = decodeURIComponent(getQueryVariable("dir"));
+}
+
+//前往私人空间
+function toUsrSpace() {
+	var UsrSpace = prompt("请输入私人标识", "");
+	if (UsrSpace != null && IsIllegal(UsrSpace)) {
+		ToDir(UsrSpace)
+	} else {
+		alert("输入违规!");
+	}
+}
 
 //前往子文件夹
 function ToDir(folderName) {
-	if (folderName == "") {
-		var usrSpace=$('#WebBody div').text();
-		if(usrSpace==""||!IsIllegal(usrSpace)){
-			alert("输入违法!")
-		}else{
-			window.open("./?dir=" + $('#WebBody div').text());
-		}
-	} else {
-		window.open("./?dir=" + FilePath + "/" + folderName);
-	}
+	window.open("./?dir=" + FilePath + "/" + folderName);
 }
+
 var fileid = 0;
+var fileButton = new Array();
 //处理文件
 function Upload(files) {
 	if (files.length === 0) {
@@ -59,15 +65,18 @@ function handle(files, i, ele) {
 	$('#WebBody').append("<div class='item'>" +
 		"		<img src='./Static/img/icons/" + prefix + ".svg'>" +
 		"		<span>" + files[i].name + "</span>" +
-		"		<div class='download' onclick='Download('" + FilePath + "/" + files[i].name + "')'>下载</div>" +
-		"		<div class='delete' onclick='Delete('" + FilePath + "/" + files[i].name + "')'>删除</div>" +
-		"	</div>");
+		"		<div class='buttonArea' id='UploadFiles" + i +
+		"'><span></span></div></div>");
+	fileButton[i] =
+		"		<div class='download' onclick='Download(\"" + FilePath + "/" + files[i].name + "\")'>下载</div>" +
+		"		<div class='delete' onclick='Delete(\"" + FilePath + "/" + files[i].name + "\")'>删除</div>";
 	push(data, i, fileid);
 	fileid++;
 	if (i + 1 < ele) {
 		handle(files, i + 1, ele);
 	}
 }
+
 //上传数据
 function push(data, i, id) {
 	$.ajax({
@@ -85,18 +94,17 @@ function push(data, i, id) {
 				//loaded代表上传了多少
 				//total代表总数为多少
 				var progressRate = parseInt((e.loaded / e.total) * 100) + "%";
-				var table = '#UploadFiles' + id + ' .UploadFilesDone';
-				//$(table).html(progressRate);
+				var table = '#UploadFiles' + id + ' span';
+				$(table).html(progressRate);
 			})
-
 			return xhr;
 		}
 	}).done(function (output) {
 		if (output !== "done") {
 			alert("第" + (i + 1).toString() + "个文件上传失败！请稍候再试！");
 		} else {
-			var table = '#UploadFiles' + id + ' .UploadFilesDone';
-			//$(table).html("完成");
+			var table = '#UploadFiles' + id;
+			$(table).html(fileButton[id]);
 		}
 	}).fail(function (xhr, status) {
 		console.log(status);
@@ -106,7 +114,7 @@ function push(data, i, id) {
 //新建文件夹
 function NewFolder() {
 	var folderName = prompt("请输入文件夹名", "");
-	if(folderName!=null&&IsIllegal(folderName)){
+	if (folderName != null && IsIllegal(folderName)) {
 		$.ajax({
 			url: "./?dir=" + FilePath + "/" + folderName,
 			type: "get",
@@ -115,21 +123,21 @@ function NewFolder() {
 		}).fail(function (xhr, status) {
 			console.log(status);
 		});
-	}else{
+	} else {
 		alert("输入违规!");
 	}
 }
 
 //下载数据
-function Download(filePath){
-	window.open("./Download?dir="+filePath);
+function Download(filePath) {
+	window.open("./Download?dir=" + filePath);
 }
 
 //删除数据
-function Delete(filePath){
+function Delete(filePath) {
 	window.event.cancelBubble = true;
 	$.ajax({
-		url: "./Delete?dir="+filePath,
+		url: "./Delete?dir=" + filePath,
 		type: "get",
 	}).done(function () {
 		location.reload();
@@ -139,7 +147,7 @@ function Delete(filePath){
 }
 
 //判断是否名称违法,违法返回false
-function IsIllegal(str){
-	var patt=/^[\a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+function IsIllegal(str) {
+	var patt = /^[\a-zA-Z0-9_\u4e00-\u9fa5]+$/;
 	return patt.test(str);
 }

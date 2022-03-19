@@ -10,17 +10,14 @@
 	<script src='./Static/js/jquery.js'></script>
 	<script src='./Static/js/anime.min.js'></script>
 	<script src='./Static/js/main.js'></script>
-	<script>
-		alert("请输入您的标识进入您的个人空间，若已有人使用该标识，请改用其他标识，请文明使用，不要随意删除他人文件，空间不限大小，但长时间（10天）不进行操作将自动清空空间。");
-	</script>
 </head>
 
 <body>
 	<div id='web_bg'></div>
 	<div id='Title'>{{.Name}}</div>
 	<div id='WebBody' class='toUsrSpace'>
-		<div contenteditable placeholder='请输入'></div>
-		<span onclick="ToDir('')">|  提交</span>
+		<span>请输入您的标识进入您的个人空间，若已有人使用该标识，请改用其他标识，请文明使用，不要随意删除他人文件，空间不限大小，但长时间（10天）不进行操作将自动清空空间。</span>
+		<div onclick="toUsrSpace()">GoForIt</div>
 	</div>
 </body>
 
