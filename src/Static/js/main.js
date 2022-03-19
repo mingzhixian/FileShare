@@ -66,7 +66,7 @@ function handle(files, i, ele) {
 		"		<img src='./Static/img/icons/" + prefix + ".svg'>" +
 		"		<span>" + files[i].name + "</span>" +
 		"		<div class='buttonArea' id='UploadFiles" + i +
-		"'><span></span></div></div>");
+		"'><a></a></div></div>");
 	fileButton[i] =
 		"		<div class='download' onclick='Download(\"" + FilePath + "/" + files[i].name + "\")'>下载</div>" +
 		"		<div class='delete' onclick='Delete(\"" + FilePath + "/" + files[i].name + "\")'>删除</div>";
@@ -94,7 +94,7 @@ function push(data, i, id) {
 				//loaded代表上传了多少
 				//total代表总数为多少
 				var progressRate = parseInt((e.loaded / e.total) * 100) + "%";
-				var table = '#UploadFiles' + id + ' span';
+				var table = '#UploadFiles' + id + ' a';
 				$(table).html(progressRate);
 			})
 			return xhr;
