@@ -53,7 +53,7 @@ func main() {
 	fmt.Println("监听端口：" + strconv.Itoa(*p))
 	fmt.Println("启动服务...")
 	//设置每日任务
-	daily()
+	//daily()
 	//设置监听
 	staticHandle := http.FileServer(http.FS(static))
 	http.Handle("/Static/js/", staticHandle)
